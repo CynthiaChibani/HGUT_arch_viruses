@@ -8,5 +8,5 @@
 ## running CheckV v1.0.1 on the dataset
 
 ```
-checkv end_to_end input_file.fna output_directory -t 16
+checkv end_to_end vir_1279.fna ../vir_1279_CheckV -t 16
 ```
