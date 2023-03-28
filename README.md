@@ -41,11 +41,7 @@ Error in pi0est(p, ...) :
   ERROR: The estimated pi0 <= 0. Check that you have valid p-values or use a different range of lambda.
 
 ```
-## running DeepVirFinder
-```
-
-```
-## running VIBRANT v1.2.1 
+## running VIBRANT v1.2.1 and DeepVirFinder
 - on sunam088 ViWrap env
 - incompatible with module load gcc12-env/12.1.0 on caucluster
 ```
