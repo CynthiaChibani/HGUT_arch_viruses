@@ -50,7 +50,10 @@ Error in pi0est(p, ...) :
 - incompatible with module load gcc12-env/12.1.0 on caucluster
 ```
 
+conda activate /zfshome/sunam088/.conda/envs/ViWrap/
+cd /work_beegfs/sunam088/ViWrap
 
+./ViWrap run_wo_reads --input_metagenome /work_beegfs/sunam088/BGR_Viwrap/vir_1279.fna --out_dir /work_beegfs/sunam088/BGR_Viwrap/vir_1279_Out --db_dir ../ViWrap_DB/ --identify_method vb-vs-dvf --conda_env_dir /zfshome/sunam088/.conda/envs/ViWrap/ --threads 12
 ```
 
 ## running geNomad v1.5.0
