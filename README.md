@@ -62,6 +62,19 @@ genomad end-to-end --cleanup --splits 8 vir_1279.fna ../vir_1279_genomad ../../g
 cd 1167_arch_MAGs_HGUT
 mkdir ../Minced
 conda activate minced
+# Identify spacers in arch MAGs hosts
 for i in *.fa; do minced -minNR 2 $i ../Minced/"$i".crisprs ../Minced/"$i".gff; done
 for i in *crisprs; do python minced_parser.py $i spacers > "$i".parsed.fa; done
+
+# make BLAST_DB out of vir_DB
+makeblastdb -dbtype nucl -in /work_beegfs/sunam162/arch_MAGs_viruses_Rebuttal/Dataset/vir_1279.fna -out /work_beegfs/sunam162/arch_MAGs_viruses_Rebuttal/BLASTn_vir_1279_Minced_spacers/vir_1279_DB
+
+# BLAST spacers to vir_DB
+for i in *.fa; do blastn -ungapped -out ../BLASTn_vir_1279_Minced_spacers/"$i"_blast_out -outfmt 7 -db /work_beegfs/sunam162/arch_MAGs_viruses_Rebuttal/BLASTn_vir_1279_Minced_spacers/vir_1279_DB -query $i; done
+
+# Parse BLASTn output
+cd ../BLASTn_vir_1279_Minced_spacers
+for f in *_blast_out; do paste $f <(yes $f | head -n $(cat $f | wc -l)) > $f.new; done
+cat *new > all_blast.txt
+rm *.new *_blast_out
 ```
