@@ -57,3 +57,11 @@ cd /work_beegfs/sunam088/ViWrap
 conda activate genomad
 genomad end-to-end --cleanup --splits 8 vir_1279.fna ../vir_1279_genomad ../../genomad_db/
 ```
+## running minCED
+```
+cd 1167_arch_MAGs_HGUT
+mkdir ../Minced
+conda activate minced
+for i in *.fa; do echo  minced -minNR 2 $i ../Minced/"$i".crisprs ../Minced/"$i".gff; done
+for i in *crisprs; do python minced_parser.py $i spacers > "$i".parsed.fa; done
+```
