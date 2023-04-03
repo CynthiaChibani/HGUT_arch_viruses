@@ -57,6 +57,13 @@ cd /work_beegfs/sunam088/ViWrap
 conda activate genomad
 genomad end-to-end --cleanup --splits 8 vir_1279.fna ../vir_1279_genomad ../../genomad_db/
 ```
+## running viralverify
+```
+conda activate ViralVerify
+
+viralverify -f /work_beegfs/sunam162/arch_MAGs_viruses_Rebuttal/Dataset/vir_1279.fna -o /work_beegfs/sunam162/arch_MAGs_viruses_Rebuttal/vir_1279_ViralVerify --hmm /work_beegfs/sunam162/Pfam/nbc_hmms.hmm -p -t 10
+```
+
 ## running minCED
 ```
 cd 1167_arch_MAGs_HGUT
