@@ -77,7 +77,7 @@ conda activate minced
 for i in *.fa; do minced -minNR 2 $i ../Minced/"$i".crisprs ../Minced/"$i".gff; done
 for i in *crisprs; do python minced_parser.py $i spacers > "$i".parsed.fa; done
 ```
-### BLASTING spacers against the HGAVD
+### BLAST of spacers against the HGAVD
 ```
 # make BLAST_DB out of vir_DB
 makeblastdb -dbtype nucl -in vir_1279.fna -out vir_1279_DB
@@ -85,7 +85,6 @@ makeblastdb -dbtype nucl -in vir_1279.fna -out vir_1279_DB
 # BLAST spacers to vir_DB
 for i in *.fa; do blastn -ungapped -out "$i"_blast_out -outfmt 7 -db vir_1279_DB -query $i; done
 ```
-
 
 # Verification of Viral Hallmark Genes
 ## Running eggNOG-mapper
