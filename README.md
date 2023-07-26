@@ -4,7 +4,9 @@
 
 - Dataset https://figshare.com/articles/dataset/Nucleotide_sequences_and_metadata_file_of_archaeal_viruses/21152404/3
 
-# Viral Peediction
+# Viral Prediction
+- Command lines used to predict viruses from the HGAVD
+- Same command lines were used for archaea Viruses downloaded from RefSeq database
 ## Running CheckV v1.0.1
 - https://bitbucket.org/berkeleylab/checkv/src/master/
 - Using a single command to run the full pipeline as recommended:
@@ -58,24 +60,65 @@ viralverify -f vir_1279.fna -o vir_1279_ViralVerify --hmm ../Pfam/nbc_hmms.hmm -
 ```
 
 # Hits to CRISPR spacers
-## Running minCED
+
+## Identification of CRISPR spacers in archaea MAGs hosts
+### Running minCED on the 1167 archaea MAGs
+- archaea MAGs from the human gut detailed in:
+- https://www.nature.com/articles/s41564-021-01020-9
+- https://www.nature.com/articles/s41587-020-0603-3
+- https://www.ebi.ac.uk/metagenomics/genome-catalogues/human-gut-v2-0-1
+
+- https://github.com/ctSkennerton/minced
+- To find repeats in short sequences, we need to decrease the minimum number of repeats to find. For example, in 100 bp reads, we could not possibly find more than 2 repeats:
+- `minced -minNR 2 metagenome.fna`
+- the minced_parser script was used from https://github.com/Russel88/EsoPy  
 ```
-cd 1167_arch_MAGs_HGUT
-mkdir ../Minced
 conda activate minced
-# Identify spacers in arch MAGs hosts
 for i in *.fa; do minced -minNR 2 $i ../Minced/"$i".crisprs ../Minced/"$i".gff; done
 for i in *crisprs; do python minced_parser.py $i spacers > "$i".parsed.fa; done
-
+```
+### BLASTING spacers against the HGAVD
+```
 # make BLAST_DB out of vir_DB
-makeblastdb -dbtype nucl -in /work_beegfs/sunam162/arch_MAGs_viruses_Rebuttal/Dataset/vir_1279.fna -out /work_beegfs/sunam162/arch_MAGs_viruses_Rebuttal/BLASTn_vir_1279_Minced_spacers/vir_1279_DB
+makeblastdb -dbtype nucl -in vir_1279.fna -out vir_1279_DB
 
 # BLAST spacers to vir_DB
-for i in *.fa; do blastn -ungapped -out ../BLASTn_vir_1279_Minced_spacers/"$i"_blast_out -outfmt 7 -db /work_beegfs/sunam162/arch_MAGs_viruses_Rebuttal/BLASTn_vir_1279_Minced_spacers/vir_1279_DB -query $i; done
+for i in *.fa; do blastn -ungapped -out "$i"_blast_out -outfmt 7 -db vir_1279_DB -query $i; done
+```
 
-# Parse BLASTn output
-cd ../BLASTn_vir_1279_Minced_spacers
-for f in *_blast_out; do paste $f <(yes $f | head -n $(cat $f | wc -l)) > $f.new; done
-cat *new > all_blast.txt
-rm *.new *_blast_out
+
+# Verification of Viral Hallmark Genes
+## Running eggNOG-mapper
+- https://github.com/eggnogdb/eggnog-mapper
+- Run search and annotation for assembled contigs, using MMseqs2 "blastx" hits for gene prediction
+- `emapper.py -m mmseqs --itype metagenome -i FASTA_FILE_NTS -o test`
+```
+conda activate eggNOG
+emapper.py -i Hallmark_Genes_for_Archaeal_Virus.faa --itype proteins -o Hallmark_Genes_for_Archaeal_Virus_eggNOG.out -m mmseqs
+```
+
+## Running DIAMOND 
+- https://github.com/bbuchfink/diamond
+- creating a diamond database our of the Viral Hallmark genes published by Li et al and using the database to scan the HGAVD.
+```
+diamond makedb --in Hallmark_Genes_for_Archaeal_Virus.faa -d Hallmark_Genes_for_Archaeal_Virus_db
+diamond blastx -d Hallmark_Genes_for_Archaeal_Virus_db.dmnd --fast -q vir_1279.fna -o DIAMOND_vir_1279_against_Hallmark_genes_matches_10e5_FINAL.csv -e 0.00001
+```
+
+## Running HMMsearch
+- https://github.com/hyattpd/Prodigal
+- Fast, reliable protein-coding gene prediction for prokaryotic genomes (-predict CDS of HGAVD viruses)
+- `prodigal -i my.genome.fna -o my.genes -a my.proteins.faa`
+```
+prodigal -i vir_1279.fna -o vir_1279.genes -a vir_1279.faa
+```
+- against VOG HMMs
+- downloaded from https://vogdb.org/
+```
+for i in *.hmm; do hmmsearch --tblout "$i".hmm.out -E 1e-5 $i vir_1279.faa; done
+```
+- against VPF HMMs
+- downloaded from [https://vogdb.org/](https://img.jgi.doe.gov//docs/final_list.hmms.gz)https://img.jgi.doe.gov//docs/final_list.hmms.gz
+```
+hmmsearch --tblout vir_1279_against_VPF.hmm.out -E 1e-5 VPF_final_list.hmms vir_1279.faa; done
 ```
