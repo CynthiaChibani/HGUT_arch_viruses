@@ -114,13 +114,14 @@ diamond blastx -d Hallmark_Genes_for_Archaeal_Virus_db.dmnd --fast -q vir_1279.f
 conda activate prokka
 prodigal -i vir_1279.fna -o vir_1279.genes -a vir_1279.faa
 ```
-- against VOG HMMs
+- https://github.com/EddyRivasLab/hmmer
+- Running hmmsearch against VOG HMMs
 - downloaded from https://vogdb.org/
 ```
 conda activate hmmer
 for i in *.hmm; do hmmsearch --tblout "$i".hmm.out -E 1e-5 $i vir_1279.faa; done
 ```
-- against VPF HMMs
+- Running hmmsearch against VPF HMMs
 - downloaded from [https://vogdb.org/](https://img.jgi.doe.gov//docs/final_list.hmms.gz)https://img.jgi.doe.gov//docs/final_list.hmms.gz
 ```
 conda activate hmmer
