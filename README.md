@@ -92,7 +92,7 @@ for i in *.fa; do blastn -ungapped -out "$i"_blast_out -outfmt 7 -db vir_1279_DB
 - Run search and annotation for assembled contigs, using MMseqs2 "blastx" hits for gene prediction
 - `emapper.py -m mmseqs --itype metagenome -i FASTA_FILE_NTS -o test`
 ```
-conda activate eggNOG
+conda activate eggNOGmapper
 emapper.py -i Hallmark_Genes_for_Archaeal_Virus.faa --itype proteins -o Hallmark_Genes_for_Archaeal_Virus_eggNOG.out -m mmseqs
 ```
 
@@ -100,6 +100,7 @@ emapper.py -i Hallmark_Genes_for_Archaeal_Virus.faa --itype proteins -o Hallmark
 - https://github.com/bbuchfink/diamond
 - creating a diamond database our of the Viral Hallmark genes published by Li et al and using the database to scan the HGAVD.
 ```
+conda activate eggNOGmapper
 diamond makedb --in Hallmark_Genes_for_Archaeal_Virus.faa -d Hallmark_Genes_for_Archaeal_Virus_db
 diamond blastx -d Hallmark_Genes_for_Archaeal_Virus_db.dmnd --fast -q vir_1279.fna -o DIAMOND_vir_1279_against_Hallmark_genes_matches_10e5_FINAL.csv -e 0.00001
 ```
@@ -109,15 +110,18 @@ diamond blastx -d Hallmark_Genes_for_Archaeal_Virus_db.dmnd --fast -q vir_1279.f
 - Fast, reliable protein-coding gene prediction for prokaryotic genomes (-predict CDS of HGAVD viruses)
 - `prodigal -i my.genome.fna -o my.genes -a my.proteins.faa`
 ```
+conda activate prokka
 prodigal -i vir_1279.fna -o vir_1279.genes -a vir_1279.faa
 ```
 - against VOG HMMs
 - downloaded from https://vogdb.org/
 ```
+conda activate hmmer
 for i in *.hmm; do hmmsearch --tblout "$i".hmm.out -E 1e-5 $i vir_1279.faa; done
 ```
 - against VPF HMMs
 - downloaded from [https://vogdb.org/](https://img.jgi.doe.gov//docs/final_list.hmms.gz)https://img.jgi.doe.gov//docs/final_list.hmms.gz
 ```
+conda activate hmmer
 hmmsearch --tblout vir_1279_against_VPF.hmm.out -E 1e-5 VPF_final_list.hmms vir_1279.faa; done
 ```
