@@ -4,69 +4,61 @@
 
 - Dataset https://figshare.com/articles/dataset/Nucleotide_sequences_and_metadata_file_of_archaeal_viruses/21152404/3
 
+# Viral Peediction
 ## Running CheckV v1.0.1
 - https://bitbucket.org/berkeleylab/checkv/src/master/
-- Using a single command to run the full pipeline (recommended):
+- Using a single command to run the full pipeline as recommended:
 - `checkv end_to_end input_file.fna output_directory -t 16`
 ```
 conda activate CheckV
-checkv end_to_end vir_1279.fna vir_1279_CheckV_Out -t 16
+checkv end_to_end vir_1279.fna ../vir_1279_CheckV_Out -t 16
 ```
 
-## running VirSorter 2.2.4
+## Running VirSorter 2.2.4
+- https://github.com/jiarong/VirSorter2
+- Quick Run : To run viral sequence identification on a test dataset
+- `virsorter run -w test.out -i test.fa --min-length 1500 -j 4 all`
 ```
 conda activate vs2
-virsorter run -w ../vir_1279_vs2_out -i vir_1279.fna --include-groups "dsDNAphage,ssDNA" -j 4 --min-score 0.8 classify
-```
-## running VirSorter v1.0.6
-```
-source activate virsorter
-wrapper_phage_contigs_sorter_iPlant.pl -f vir_1279.fna --db 1 --wdir vs_out --ncpu 12 --data-dir /path/to/virsorter-data
-```
-## running VirFinder
-```
-conda activate virfinder
-## (1) set the input fasta file name. 
-library(VirFinder)
-
-## (2) prediction
-predResult <- VF.pred("vir_1279.fna")
-predResult
-
-#### (2.1) sort sequences by p-value in ascending order
-predResult[order(predResult$pvalue),]
-
-#### (2.2) estimate q-values (false discovery rates) based on p-values
-predResult$qvalue <- VF.qvalue(predResult$pvalue)
-
-Error in pi0est(p, ...) : 
-  ERROR: The estimated pi0 <= 0. Check that you have valid p-values or use a different range of lambda.
-
-```
-## running VIBRANT v1.2.1 and DeepVirFinder
-- on sunam088 ViWrap env
-- incompatible with module load gcc12-env/12.1.0 on caucluster
+virsorter run -w ../vir_1279_vs2_Out -i vir_1279.fna -j 4 all
 ```
 
-conda activate /zfshome/sunam088/.conda/envs/ViWrap/
-cd /work_beegfs/sunam088/ViWrap
-
-./ViWrap run_wo_reads --input_metagenome /work_beegfs/sunam088/BGR_Viwrap/vir_1279.fna --out_dir /work_beegfs/sunam088/BGR_Viwrap/vir_1279_Out --db_dir ../ViWrap_DB/ --identify_method vb-vs-dvf --conda_env_dir /zfshome/sunam088/.conda/envs/ViWrap/ --threads 12
+ ## Running VirSorter v1.0.6
+- https://github.com/simroux/VirSorter
+- To run VirSorter, type the following:
+- `wrapper_phage_contigs_sorter_iPlant.pl -f assembly.fasta --db 1 --wdir output_directory --ncpu 4 --data-dir /path/to/virsorter-data`
+```
+conda activate virsorter
+wrapper_phage_contigs_sorter_iPlant.pl -f vir_1279.fna --db 1 --wdir ../vir_1279_vs_Out --ncpu 12 --data-dir ../virsorter-data
 ```
 
-## running geNomad v1.5.0
+## Running VIBRANT v1.2.1
+- https://github.com/AnantharamanLab/VIBRANT
+- Test out a small dataset of mixed viral and non-viral scaffolds in nucleotide format
+- `python3 VIBRANT_run.py -i example_data/mixed_example.fasta`
+```
+conda activate VIBRANT
+VIBRANT_run.py -i vir_1279.fna -folder ../vir_1279_VIBRANT_Out -t 16 -virome -d ../VIBRANT_db
+```
+
+## Running geNomad v1.5.0
+- https://github.com/apcamargo/genomad
+- The command to execute geNomad is structured like this:
+- `genomad end-to-end [OPTIONS] INPUT OUTPUT DATABASE`
 ```
 conda activate genomad
-genomad end-to-end --cleanup --splits 8 vir_1279.fna ../vir_1279_genomad ../../genomad_db/
+genomad end-to-end --cleanup --splits 8 vir_1279.fna ../vir_1279_genomad_Out ../genomad_db/
 ```
-## running viralverify
+
+## Running ViralVerify
+- https://github.com/ablab/viralVerify
 ```
 conda activate ViralVerify
-
-viralverify -f /work_beegfs/sunam162/arch_MAGs_viruses_Rebuttal/Dataset/vir_1279.fna -o /work_beegfs/sunam162/arch_MAGs_viruses_Rebuttal/vir_1279_ViralVerify --hmm /work_beegfs/sunam162/Pfam/nbc_hmms.hmm -p -t 10
+viralverify -f vir_1279.fna -o vir_1279_ViralVerify --hmm ../Pfam/nbc_hmms.hmm -p -t 10
 ```
 
-## running minCED
+# Hits to CRISPR spacers
+## Running minCED
 ```
 cd 1167_arch_MAGs_HGUT
 mkdir ../Minced
