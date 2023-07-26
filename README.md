@@ -4,11 +4,13 @@
 
 - Dataset https://figshare.com/articles/dataset/Nucleotide_sequences_and_metadata_file_of_archaeal_viruses/21152404/3
 
-## running CheckV v1.0.1
+## Running CheckV v1.0.1
+- https://bitbucket.org/berkeleylab/checkv/src/master/
+- Using a single command to run the full pipeline (recommended):
+- `checkv end_to_end input_file.fna output_directory -t 16`
 ```
 conda activate CheckV
-export CHECKVDB=/work_beegfs/sunam162/checkv-db-v1.5
-checkv end_to_end vir_1279.fna ../vir_1279_CheckV -t 16
+checkv end_to_end vir_1279.fna vir_1279_CheckV_Out -t 16
 ```
 
 ## running VirSorter 2.2.4
