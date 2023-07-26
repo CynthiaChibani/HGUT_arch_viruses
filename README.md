@@ -79,6 +79,7 @@ for i in *crisprs; do python minced_parser.py $i spacers > "$i".parsed.fa; done
 ```
 ### BLAST of spacers against the HGAVD
 ```
+conda activate BLAST
 # make BLAST_DB out of vir_DB
 makeblastdb -dbtype nucl -in vir_1279.fna -out vir_1279_DB
 
