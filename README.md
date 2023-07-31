@@ -116,13 +116,13 @@ prodigal -i vir_1279.fna -o vir_1279.genes -a vir_1279.faa
 ```
 - https://github.com/EddyRivasLab/hmmer
 - Running hmmsearch against VOG HMMs
-- downloaded from https://vogdb.org/
+- downloaded from (https://vogdb.org/)
 ```
 conda activate hmmer
 for i in *.hmm; do hmmsearch --tblout "$i".hmm.out -E 1e-5 $i vir_1279.faa; done
 ```
 - Running hmmsearch against VPF HMMs
-- downloaded from [https://vogdb.org/](https://img.jgi.doe.gov//docs/final_list.hmms.gz)https://img.jgi.doe.gov//docs/final_list.hmms.gz
+- downloaded from (https://img.jgi.doe.gov//docs/final_list.hmms.gz)https://img.jgi.doe.gov//docs/final_list.hmms.gz
 ```
 conda activate hmmer
 hmmsearch --tblout vir_1279_against_VPF.hmm.out -E 1e-5 VPF_final_list.hmms vir_1279.faa; done
@@ -134,7 +134,10 @@ conda activate prokka
 prodigal -i Zhang_X_2015_NM_ERR589874.NODE_1_560083.fna -o Zhang_X_2015_NM_ERR589874.NODE_1_560083.gbk -a Zhang_X_2015_NM_ERR589874.NODE_1_560083.faa
 ```
 ## Generating an input file for visualization
-- Software used GenomeVx [http://wolfe.ucd.ie/GenomeVx/]
+- Software used GenomeVx (http://wolfe.ucd.ie/GenomeVx/)
 - Included information about hits to Li et al. Hallmark genes
 - Included information about areas with matches to predicted CRISPR spacers from the human gut archaeome
+- Included information about hits to VOGs confirmed by CheckV as well.
+- -- Information is found in the output folder of the CheckV run under /tmp/gene_features.tsv.
+- -- This output includes information on hits to the checkv-db (https://portal.nersc.gov/CheckV/)
 
