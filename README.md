@@ -127,3 +127,14 @@ for i in *.hmm; do hmmsearch --tblout "$i".hmm.out -E 1e-5 $i vir_1279.faa; done
 conda activate hmmer
 hmmsearch --tblout vir_1279_against_VPF.hmm.out -E 1e-5 VPF_final_list.hmms vir_1279.faa; done
 ```
+# Visualizatin of contig Zhang_X_2015_NM_ERR589874.NODE_1_560083
+## Generating an annotation file of the longest contig from the HGAVD
+```
+conda activate prokka
+prodigal -i Zhang_X_2015_NM_ERR589874.NODE_1_560083.fna -o Zhang_X_2015_NM_ERR589874.NODE_1_560083.gbk -a Zhang_X_2015_NM_ERR589874.NODE_1_560083.faa
+```
+## Generating an input file for visualization
+- Software used GenomeVx [http://wolfe.ucd.ie/GenomeVx/]
+- Included information about hits to Li et al. Hallmark genes
+- Included information about areas with matches to predicted CRISPR spacers from the human gut archaeome
+
