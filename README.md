@@ -140,4 +140,4 @@ prodigal -i Zhang_X_2015_NM_ERR589874.NODE_1_560083.fna -o Zhang_X_2015_NM_ERR58
 - Included information about hits to VOGs confirmed by CheckV as well.
 - -- Information is found in the output folder of the CheckV run under /tmp/gene_features.tsv.
 - -- This output includes information on hits to the checkv-db (https://portal.nersc.gov/CheckV/)
-
+- A detailed workbook for reproducing the figure is included in this repository
